@@ -9,8 +9,6 @@ jobs:
   demo-job:
     name: Automate running an InSpec profile
     runs-on: ubuntu-20.04
-    env:
-      CHEF_LICENSE: accept-silent
     steps:
       - name: Update runner
         run: sudo apt-get update
@@ -19,6 +17,7 @@ jobs:
       - name: Run InSpec  # use the existing Ubuntu 20.04 STIG InSpec profile straight from a GitHub link
         run: |
           sudo inspec exec https://github.com/mitre/canonical-ubuntu-20.04-lts-stig-baseline/archive/master.tar.gz \
+          --chef-license=accept \
           --reporter cli json:results/test_run.json
       - name: Save Test Result JSON  # save our results to the pipeline artifacts
         if: ${{ always() }}  # make sure we always save the result, even if the InSpec run found failing tests
