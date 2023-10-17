@@ -18,8 +18,7 @@ jobs:
         run: curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
       - name: Run InSpec  # use the existing Ubuntu 20.04 STIG InSpec profile straight from a GitHub link
         run: |
-          inspec exec https://github.com/mitre/canonical-ubuntu-20.04-lts-stig-baseline/archive/master.tar.gz \
-          --sudo \
+          sudo inspec exec https://github.com/mitre/canonical-ubuntu-20.04-lts-stig-baseline/archive/master.tar.gz \
           --reporter cli json:results/test_run.json
       - name: Save Test Result JSON  # save our results to the pipeline artifacts
         if: ${{ always() }}  # make sure we always save the result, even if the InSpec run found failing tests
