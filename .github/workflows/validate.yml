@@ -1,0 +1,34 @@
+name: Demo Security Validation Pipeline
+
+on:
+  push:
+    branches: [ main, pipeline ]   # trigger this action on any push to main branch
+  workflow_dispatch:     # or we can manually trigger it for test purposes
+
+jobs:
+  demo-job:
+    name: Automate running an InSpec profile
+    runs-on: ubuntu-20.04
+    env:
+      CHEF_LICENSE: accept-silent
+    steps:
+      - name: Update runner
+        run: sudo apt-get update
+      - name: Run InSpec  # use the existing Ubuntu 20.04 STIG InSpec profile straight from a GitHub link
+        run: |
+          inspec exec https://github.com/mitre/canonical-ubuntu-20.04-lts-stig-baseline/archive/master.tar.gz \
+          --sudo \
+          --reporter cli json:results/test_run.json
+      - name: Save Test Result JSON  # save our results to the pipeline artifacts
+        if: ${{ always() }}  # make sure we always save the result, even if the InSpec run found failing tests
+        uses: actions/upload-artifact@v3
+        with:
+          path: results/test_run.json
+      - name: Display our results summary  # now we can work with the result file in later steps
+        uses: mitre/saf_action@v1
+        with:
+          command_string: "view summary -i results/test_run.json"
+      - name: Ensure the scan meets our ${{ matrix.suite }} results threshold
+        uses: mitre/saf_action@v1
+        with:
+          command_string: "validate threshold -i results/test_run.json -F threshold.yml"
