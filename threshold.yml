@@ -1,0 +1,3 @@
+---
+error.total: 0      # the run should not have profile source code errors
+compliance.min: 1   # at least one percent of the tests should pass
