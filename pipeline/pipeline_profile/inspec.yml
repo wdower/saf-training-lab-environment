@@ -1,0 +1,13 @@
+name: demo_pipeline_profile
+title: SAF Training Demo Pipeline Profile
+maintainer: MITRE SAF Team
+copyright: MITRE, 2023
+copyright_email: saf@groups.mitre.org
+license: Apache-2.0
+summary: "Simple profile for walkthrough of running InSpec in a security pipeline"
+version: 1.0.0
+inspec_version: ">= 4.26"
+
+depends:
+  - name: ubuntu-20.04-stig-baseline
+    url: https://github.com/mitre/canonical-ubuntu-20.04-lts-stig-baseline/archive/master.tar.gz
