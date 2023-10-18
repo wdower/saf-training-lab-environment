@@ -1,0 +1,3 @@
+# this file is where we can record inputs we want to pass to InSpec runs
+---
+disable_slow_controls: true # many STIG controls take so long to run that they are unecessary for this demo
