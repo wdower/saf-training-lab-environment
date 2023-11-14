@@ -1,11 +1,11 @@
-name: Demo Security Validation Pipeline
+name: Demo Security Validation Gold Image Pipeline
 
 on:
   push:
     branches: [ main, pipeline ]   # trigger this action on any push to main branch
 
 jobs:
-  demo-job:
+  gold-image:
     name: Gold Image NGINX
     runs-on: ubuntu-20.04
     env:
@@ -22,7 +22,7 @@ jobs:
       - name: LINT - Run InSpec Check # double-check that we don't have any serious issues in our profile code
         run: inspec check my_nginx
       - name: DEPLOY - Run a Docker container from nginx
-        run: docker run -dit --name nginx docker pull nginx:latest
+        run: docker run -dit --name nginx
       - name: DEPLOY - Install Python for our nginx container
         run: |
           docker exec nginx apt-get update -y
