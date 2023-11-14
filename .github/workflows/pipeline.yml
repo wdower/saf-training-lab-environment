@@ -34,7 +34,7 @@ jobs:
       - name: HARDEN - Fetch Ansible requirements
         run: ansible-galaxy install -r ansible-nginx-stigready-hardening/requirements.yml
       - name: HARDEN - Run Ansible hardening
-        run: ansible-playbook --inventory=nginx, --connection=docker ansible-nginx-stigready-hardening/playbook.yml
+        run: ansible-playbook --inventory=nginx, --connection=docker ansible-nginx-stigready-hardening/hardening-playbook.yml
       - name: VALIDATE - Run InSpec
         continue-on-error: true # we dont want to stop if our InSpec run finds failures, we want to continue and record the result
         run: |
