@@ -1,0 +1,45 @@
+name: Demo Security Validation Pipeline
+
+on:
+  push:
+    branches: [ main, pipeline ]   # trigger this action on any push to main branch
+  workflow_dispatch:     # or we can manually trigger it for test purposes
+
+jobs:
+  demo-job:
+    name: Gold Image NGINX
+    runs-on: ubuntu-20.04
+    env:
+      TIMESTAMP: $(date +"%Y-%m-%d-%H-%M-%S")   # timestamp for reports
+      ACCEPT_CHEF_LICENSE: true                 # so that we can use InSpec without manually accepting the license
+      PROFILE: my_nginx                         # path to our profile
+    steps:
+      - name: PREP - Update runner # updating all dependencies is always a good start
+        run: sudo apt-get update
+      - name: PREP - Install InSpec executable 
+        run: curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
+      - name: PREP - Check out this repository # because that's where our profile is!
+        uses: actions/checkout@v3
+      - name: LINT - Run InSpec Check # double-check that we don't have any serious issues in our profile code
+        run: inspec check my_nginx
+      - name: DEPLOY - Run a Docker container from nginx
+        run: docker run -dit --name nginx nginx:latest # this will deploy our test image -- the same base image we've used in class so far
+      - name: Run InSpec  
+        run: |
+          sudo inspec exec $PROFILE \
+          --inputs-file=$PROFILE/inputs.yml
+          --target docker://nginx \
+          --reporter cli json:results/pipeline_run_$TIMESTAMP.json
+      - name: Save Test Result JSON  # save our results to the pipeline artifacts, even if the InSpec run found failing tests
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          path: results/pipeline_run_$TIMESTAMP.json
+      - name: Display our results summary  # now we can work with the result file in later steps
+        uses: mitre/saf_action@v1
+        with:
+          command_string: "view summary -i results/pipeline_run_$TIMESTAMP.json"
+      - name: Ensure the scan meets our results threshold
+        uses: mitre/saf_action@v1
+        with:
+          command_string: "validate threshold -i results/pipeline_run_$TIMESTAMP.json-F threshold.yml"
