@@ -22,12 +22,15 @@ jobs:
       - name: LINT - Run InSpec Check # double-check that we don't have any serious issues in our profile code
         run: inspec check my_nginx
       - name: DEPLOY - Run a Docker container from nginx
-        run: docker run -dit --name nginx nginx:latest # this will deploy our test image -- the same base image we've used in class so far
-      - name: DEPLOY - Configure Ansible
-        shell: bash
-        run: source install-nginxHardeningTools.sh
+        run: docker run -dit --name nginx docker pull nginx:latest
+      - name: DEPLOY - Install Python for our nginx container
+        run: |
+          docker exec nginx apt-get update -y
+          docker exec nginx apt-get install -y python3
+      - name: HARDEN - Fetch Ansible role
+        run: ansible-galaxy install -r requirements.yml
       - name: HARDEN - Run Ansible hardening
-        run: ansible-playbook -i hosts.yml hardening-playbook.yml # look familiar? this is from the User Class
+        run: ansible-playbook --inventory=nginx, --connection=docker spec/playbook.yml
       - name: VALIDATE - Run InSpec
         continue-on-error: true # we dont want to stop if our InSpec run finds failures, we want to continue and record the result
         run: |
