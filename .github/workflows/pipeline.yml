@@ -28,7 +28,7 @@ jobs:
           docker exec nginx apt-get update -y
           docker exec nginx apt-get install -y python3
       - name: HARDEN - Fetch Ansible role
-        run: ansible-galaxy install -r requirements.yml
+        run: ansible-galaxy install -r spec/requirements.yml
       - name: HARDEN - Run Ansible hardening
         run: ansible-playbook --inventory=nginx, --connection=docker spec/playbook.yml
       - name: VALIDATE - Run InSpec
