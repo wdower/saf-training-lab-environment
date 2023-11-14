@@ -24,6 +24,7 @@ jobs:
       - name: DEPLOY - Run a Docker container from nginx
         run: docker run -dit --name nginx nginx:latest # this will deploy our test image -- the same base image we've used in class so far
       - name: DEPLOY - Configure Ansible
+        shell: bash
         run: source install-nginxHardeningTools.sh
       - name: HARDEN - Run Ansible hardening
         run: ansible-playbook -i hosts.yml hardening-playbook.yml # look familiar? this is from the User Class
