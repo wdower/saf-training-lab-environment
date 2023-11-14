@@ -1,3 +1,4 @@
 - hosts: all
-  become: yesroles: 
+  become: yes
+  roles: 
     - role: "ansible-nginx-stigready-hardening"
