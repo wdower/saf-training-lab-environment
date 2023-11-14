@@ -22,7 +22,7 @@ jobs:
       - name: LINT - Run InSpec Check # double-check that we don't have any serious issues in our profile code
         run: inspec check my_nginx
       - name: DEPLOY - Run a Docker container from nginx
-        run: docker run -dit --name nginx
+        run: docker run -dit --name nginx nginx:latest
       - name: DEPLOY - Install Python for our nginx container
         run: |
           docker exec nginx apt-get update -y
