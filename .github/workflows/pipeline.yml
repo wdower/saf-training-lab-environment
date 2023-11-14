@@ -17,9 +17,9 @@ jobs:
       - name: PREP - Install InSpec executable 
         run: curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec -v 5
 
-      - name: PREP - Check out this repository # because that's where our profile is!
+      - name: PREP - Check out this repository  # because that's where our profile is!
         uses: actions/checkout@v3
-      - name: LINT - Run InSpec Check # double-check that we don't have any serious issues in our profile code
+      - name: LINT - Run InSpec Check           # double-check that we don't have any serious issues in our profile code
         run: inspec check my_nginx
       - name: DEPLOY - Run a Docker container from nginx
         run: docker run -dit --name nginx nginx:latest
@@ -36,10 +36,10 @@ jobs:
       - name: HARDEN - Run Ansible hardening
         run: ansible-playbook --inventory=nginx, --connection=docker ansible-nginx-stigready-hardening/hardening-playbook.yml
       - name: VALIDATE - Run InSpec
-        continue-on-error: true # we dont want to stop if our InSpec run finds failures, we want to continue and record the result
+        continue-on-error: true                 # we dont want to stop if our InSpec run finds failures, we want to continue and record the result
         run: |
           inspec exec $PROFILE \
-          --input-file=$PROFILE/inputs.yml
+          --input-file=$PROFILE/inputs.yml \
           --target docker://nginx \
           --reporter cli json:results/pipeline_run.json
       - name: VALIDATE - Save Test Result JSON  # save our results to the pipeline artifacts, even if the InSpec run found failing tests
