@@ -28,7 +28,7 @@ jobs:
       - name: HARDEN - Run Ansible hardening
         run: ansible-playbook -i hosts.yml hardening-playbook.yml # look familiar? this is from the User Class
       - name: VALIDATE - Run InSpec
-        continue-on-error: true # we should
+        continue-on-error: true # we dont want to stop if our InSpec run finds failures, we want to continue and record the result
         run: |
           inspec exec $PROFILE \
           --input-file=$PROFILE/inputs.yml
