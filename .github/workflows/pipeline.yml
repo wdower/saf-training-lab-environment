@@ -26,7 +26,7 @@ jobs:
       - name: Run InSpec  
         run: |
           inspec exec $PROFILE \
-          --inputs-file=$PROFILE/inputs.yml
+          --input-file=$PROFILE/inputs.yml
           --target docker://nginx \
           --reporter cli json:results/pipeline_run_$TIMESTAMP.json
       - name: Save Test Result JSON  # save our results to the pipeline artifacts, even if the InSpec run found failing tests
