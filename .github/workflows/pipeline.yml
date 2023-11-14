@@ -25,7 +25,7 @@ jobs:
         run: docker run -dit --name nginx nginx:latest # this will deploy our test image -- the same base image we've used in class so far
       - name: Run InSpec  
         run: |
-          sudo inspec exec $PROFILE \
+          inspec exec $PROFILE \
           --inputs-file=$PROFILE/inputs.yml
           --target docker://nginx \
           --reporter cli json:results/pipeline_run_$TIMESTAMP.json
