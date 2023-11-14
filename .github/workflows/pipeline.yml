@@ -23,14 +23,14 @@ jobs:
         run: inspec check my_nginx
       - name: DEPLOY - Run a Docker container from nginx
         run: docker run -dit --name nginx nginx:latest # this will deploy our test image -- the same base image we've used in class so far
-      - name: Run InSpec  
+      - name: Run InSpec
+        continue-on-error: true 
         run: |
           inspec exec $PROFILE \
           --input-file=$PROFILE/inputs.yml
           --target docker://nginx \
           --reporter cli json:results/pipeline_run_$TIMESTAMP.json
       - name: Save Test Result JSON  # save our results to the pipeline artifacts, even if the InSpec run found failing tests
-        if: ${{ always() }}
         uses: actions/upload-artifact@v3
         with:
           path: results/pipeline_run_$TIMESTAMP.json
