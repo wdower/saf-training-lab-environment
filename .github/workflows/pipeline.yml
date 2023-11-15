@@ -53,4 +53,4 @@ jobs:
       - name: VERIFY - Ensure the scan meets our results threshold
         uses: mitre/saf_action@v1
         with:
-          command_string: "validate threshold -i results/pipeline_run.json-F threshold.yml"
+          command_string: "validate threshold -i results/pipeline_run.json -F threshold.yml"
