@@ -2,7 +2,7 @@ name: Demo Security Validation Gold Image Pipeline
 
 on:
   push:
-    branches: [main] # trigger this action on any push to main branch
+    branches:
 
 jobs:
   gold-image:
