@@ -14,3 +14,9 @@ jobs:
     steps:
       - name: PREP - Update runner # updating all dependencies is always a good start
         run: sudo apt-get update
+      
+      - name: PREP - Install InSpec executable 
+        run: curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec -v 5
+
+      - name: PREP - Check out this repository  # because that's where our profile is!
+        uses: actions/checkout@v3
