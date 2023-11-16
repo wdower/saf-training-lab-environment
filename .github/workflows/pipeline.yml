@@ -20,3 +20,6 @@ jobs:
 
       - name: PREP - Check out this repository  # because that's where our profile is!
         uses: actions/checkout@v4.1.0
+
+      - name: LINT - run inspec Check
+        run: inspec check $PROFILE
