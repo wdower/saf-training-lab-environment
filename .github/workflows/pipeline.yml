@@ -23,3 +23,13 @@ jobs:
 
       - name: LINT - run inspec Check
         run: inspec check $PROFILE
+
+      - name: DEPLOY - Run a Docker container from nginx
+        run: docker run -dit --name nginx nginx:latest
+
+      - name: DEPLOY - Install Python for our nginx container
+        run: |
+         ls -la
+         docker exec nginx apt-get update -y
+         docker exec nginx apt-get install -y python3
+
