@@ -44,4 +44,15 @@ jobs:
       - name: HARDEN - Run Ansible hardening
         run: ansible-playbook --inventory=nginx, --connection=docker ansible-nginx-stigready-hardening/hardening-playbook.yml
 
+      - name: VALIDATE - Run InSpec
+        continue-on-error: true                 # we dont want to stop if our InSpec run finds failures, we want to continue and record the result
+        run: |
+          inspec exec $PROFILE \
+          --input-file=$PROFILE/inputs.yml \
+          --target docker://nginx \
+          --reporter cli json:results/pipeline_run.json
 
+      - name: VALIDATE - Save Test Result JSON  # save our results to the pipeline artifacts, even if the InSpec run found failing tests
+        uses: actions/upload-artifact@v3
+        with:
+          path: results/pipeline_run.json
